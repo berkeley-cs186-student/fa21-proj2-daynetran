@@ -148,24 +148,37 @@ class LeafNode extends BPlusNode {
     @Override
     public LeafNode get(DataBox key) {
         // TODO(proj2): implement
-
-        return null;
+        return this;
     }
 
     // See BPlusNode.getLeftmostLeaf.
     @Override
     public LeafNode getLeftmostLeaf() {
         // TODO(proj2): implement
-
-        return null;
+        return this;
     }
 
     // See BPlusNode.put.
     @Override
     public Optional<Pair<DataBox, Long>> put(DataBox key, RecordId rid) {
         // TODO(proj2): implement
+        int d = this.metadata.getOrder();
+        int numLessThanEqual = numLessThanEqual(key, keys);
+        keys.add(numLessThanEqual, key);
+        rids.add(numLessThanEqual, rid);
+        if (keys.size() < d*2) {
+            return Optional.empty();
+        } else {
+            DataBox splitKey = keys.get(d);
+            Optional<LeafNode> rightSibling = this.getRightSibling();
+            if (rightSibling.isPresent()) {
+                Long page = rightSibling.get().getPage().getPageNum();
+            }
+            LeafNode rightSibling = ;
 
-        return Optional.empty();
+            this.getRightSibling().get().getPage();
+            return
+        }
     }
 
     // See BPlusNode.bulkLoad.
@@ -173,7 +186,6 @@ class LeafNode extends BPlusNode {
     public Optional<Pair<DataBox, Long>> bulkLoad(Iterator<Pair<DataBox, RecordId>> data,
             float fillFactor) {
         // TODO(proj2): implement
-
         return Optional.empty();
     }
 
@@ -214,6 +226,18 @@ class LeafNode extends BPlusNode {
     @Override
     public Page getPage() {
         return page;
+    }
+
+    static <T extends Comparable<T>> int numLessThanEqual(T x, List<T> ys) {
+        int n = 0;
+        for (T y : ys) {
+            if (y.compareTo(x) <= 0) {
+                ++n;
+            } else {
+                break;
+            }
+        }
+        return n;
     }
 
     /** Returns the right sibling of this leaf, if it has one. */

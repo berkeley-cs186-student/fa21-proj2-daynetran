@@ -50,6 +50,7 @@ abstract class BPlusNode {
      * In the example above, inner.getLeftmostLeaf() would return leaf0, and
      * leaf1.getLeftmostLeaf() would return leaf1.
      */
+
     public abstract LeafNode getLeftmostLeaf();
 
     /**
